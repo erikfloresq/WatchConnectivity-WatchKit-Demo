@@ -4,6 +4,26 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Complication - Watch.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
+		<key>Glance - Watch.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>Notification - Watch.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>Watch.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>WatchConnectivityDemo.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -23,6 +43,11 @@
 			<true/>
 		</dict>
 		<key>08E5893B1C07615600C046CE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>08E5894F1C07623700C046CE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
