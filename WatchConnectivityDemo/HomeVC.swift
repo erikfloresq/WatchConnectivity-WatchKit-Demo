@@ -13,7 +13,7 @@ class HomeVC: UIViewController, WCSessionDelegate {
     
     //Default User
     var items = [String]()
-    var defaultDataUser = NSUserDefaults.standardUserDefaults()
+    //var defaultDataUser = NSUserDefaults.standardUserDefaults()
     
     //Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -46,11 +46,11 @@ class HomeVC: UIViewController, WCSessionDelegate {
     // MARK: Start Application
     override func viewDidLoad() {
         super.viewDidLoad()
-        if self.defaultDataUser.objectForKey("DataUser") != nil {
+        /*if self.defaultDataUser.objectForKey("DataUser") != nil {
             self.items = self.defaultDataUser.objectForKey("DataUser")! as! [String]
             self.tableView.reloadData()
             self.sendData()
-        }
+        }*/
     }
     
     // MARK: Send Item to Watch
@@ -61,11 +61,11 @@ class HomeVC: UIViewController, WCSessionDelegate {
             let messageText = textField.text!
             self.items.append(messageText)
             self.tableView.reloadData()
-            self.sendTextDataToWatch(messageText)
-            self.defaultDataUser.setObject(self.items, forKey: "DataUser")
-            self.sendData()
+            self.sendTextDataToWatch(self.items)
+            //self.defaultDataUser.setObject(self.items, forKey: "DataUser")
+            //self.sendData()
             
-            print("After dataUser \(self.defaultDataUser.objectForKey("DataUser")!)")
+            //print("After dataUser \(self.defaultDataUser.objectForKey("DataUser")!)")
         }
         addItemAlertController.addAction(addItemAlertAction)
         addItemAlertController.addTextFieldWithConfigurationHandler { (UITextField) -> Void in }
@@ -73,7 +73,7 @@ class HomeVC: UIViewController, WCSessionDelegate {
     }
     
     
-    func sendTextDataToWatch(messageText: String) -> Void {
+    func sendTextDataToWatch(messageText: [String]) -> Void {
         let applicationData = ["message" : messageText]
         if let session = session where session.reachable {
             session.sendMessage(applicationData,
@@ -94,13 +94,13 @@ class HomeVC: UIViewController, WCSessionDelegate {
     }
     }*/
     
-    func sendData() -> Void {
+    /*func sendData() -> Void {
         do{
             let applicationDict = ["appContext":self.defaultDataUser.objectForKey("DataUser")!]
             try WCSession.defaultSession().updateApplicationContext(applicationDict)
             
         } catch {}
-    }
+    }*/
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -141,8 +141,8 @@ extension HomeVC: UITableViewDataSource {
                 })
             }
             
-            self.defaultDataUser.setObject(self.items, forKey: "DataUser")
-            print("after delete userData \(self.defaultDataUser.objectForKey("DataUser")!)")
+            //self.defaultDataUser.setObject(self.items, forKey: "DataUser")
+            //print("after delete userData \(self.defaultDataUser.objectForKey("DataUser")!)")
         }
     }
     

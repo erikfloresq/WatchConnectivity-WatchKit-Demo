@@ -15,7 +15,7 @@ class HomeIC: WKInterfaceController {
     
     var items = [String]()
     @IBOutlet var tableView: WKInterfaceTable!
-    var flagTable = true
+    //var flagTable = true
     
     private let session: WCSession? = WCSession.isSupported() ?  WCSession.defaultSession() : nil
     
@@ -55,11 +55,6 @@ class HomeIC: WKInterfaceController {
         super.didDeactivate()
     }
     
-    
-    @IBAction func doMenuItemAction() {
-        print("xD")
-    }
-    
 }
 
 // MARK: WCSessionDelegate
@@ -68,8 +63,9 @@ extension HomeIC: WCSessionDelegate {
     func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
         
         dispatch_async(dispatch_get_main_queue()) {
-            if let textValue = message["message"] as? String {
-                self.items.append(textValue)
+            if let textValue = message["message"] as? [String] {
+                //self.items.append(textValue)
+                self.items = textValue
                 self.setupTable()
             }
             if let itemValue = message["item"] as? Int {
@@ -85,7 +81,7 @@ extension HomeIC: WCSessionDelegate {
     self.setupTable()
     }*/
     
-    func session(session: WCSession, didReceiveApplicationContext applicationContext: [String : AnyObject]) {
+    /*func session(session: WCSession, didReceiveApplicationContext applicationContext: [String : AnyObject]) {
         print("receive \(applicationContext)")
         
         if self.flagTable == true {
@@ -93,7 +89,7 @@ extension HomeIC: WCSessionDelegate {
             self.setupTable()
             self.flagTable = false
         }
-    }
+    }*/
     
     
     
