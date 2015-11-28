@@ -15,7 +15,7 @@ class HomeIC: WKInterfaceController {
     
     var items = [String]()
     @IBOutlet var tableView: WKInterfaceTable!
-    //var flagTable = true
+    var defaultDataUserWatch =  NSUserDefaults.standardUserDefaults()
     
     private let session: WCSession? = WCSession.isSupported() ?  WCSession.defaultSession() : nil
     
@@ -23,7 +23,6 @@ class HomeIC: WKInterfaceController {
         super.init()
         session?.delegate = self
         session?.activateSession()
-        
     }
     
     
@@ -34,6 +33,10 @@ class HomeIC: WKInterfaceController {
     }
     
     func setupTable() -> Void {
+        if let itemArray = self.defaultDataUserWatch.objectForKey("DataUserWatch") {
+            self.items = itemArray as! [String]
+            print("Use user default")
+        }
         
         tableView.setNumberOfRows(items.count, withRowType: "homeItemRow")
         for index in 0..<tableView.numberOfRows {
@@ -44,14 +47,11 @@ class HomeIC: WKInterfaceController {
     }
     
     override func willActivate() {
-        // This method is called when watch view controller is about to be visible to user
         super.willActivate()
         setupTable()
-        print("item count \(items.count)")
     }
     
     override func didDeactivate() {
-        // This method is called when watch view controller is no longer visible
         super.didDeactivate()
     }
     
@@ -66,31 +66,22 @@ extension HomeIC: WCSessionDelegate {
             if let textValue = message["message"] as? [String] {
                 //self.items.append(textValue)
                 self.items = textValue
-                self.setupTable()
             }
             if let itemValue = message["item"] as? Int {
                 self.items.removeAtIndex(itemValue)
-                self.setupTable()
+                
             }
+            self.defaultDataUserWatch.setObject(self.items, forKey: "DataUserWatch")
+            self.setupTable()
+            
         }
     }
     
-    /*func session(session: WCSession, didReceiveUserInfo applicationContext: [String : AnyObject]) {
-    print("string: \(applicationContext)")
-    self.items = (applicationContext["appContext"] as? Array)!
-    self.setupTable()
-    }*/
-    
-    /*func session(session: WCSession, didReceiveApplicationContext applicationContext: [String : AnyObject]) {
-        print("receive \(applicationContext)")
-        
-        if self.flagTable == true {
-            self.items = (applicationContext["appContext"] as? Array)!
-            self.setupTable()
-            self.flagTable = false
-        }
-    }*/
-    
-    
+    func session(session: WCSession, didReceiveUserInfo applicationContext: [String : AnyObject]) {
+        print("string: \(applicationContext)")
+        self.items = (applicationContext["appDataUser"] as? Array)!
+        self.defaultDataUserWatch.setObject(self.items, forKey: "DataUserWatch")
+    }
+   
     
 }
