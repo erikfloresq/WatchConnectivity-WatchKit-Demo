@@ -13,6 +13,7 @@ References of Watch Connectivity Framework:
  - [WCSession](https://developer.apple.com/library/watchos/documentation/WatchConnectivity/Reference/WCSession_class/index.html#//apple_ref/occ/instm/WCSession/)
  - [WCSessionDelegate](https://developer.apple.com/library/watchos/documentation/WatchConnectivity/Reference/WCSessionDelegate_protocol/index.html#//apple_ref/occ/intf/WCSessionDelegate)
  - [WatchOS 2 trasition guide](https://developer.apple.com/library/watchos/documentation/General/Conceptual/AppleWatch2TransitionGuide/UpdatetheAppCode.html)
+ - [WWDC Video](https://developer.apple.com/videos/play/wwdc2015-713/)
 
 Note:
  - Watch Connectivity is available from WatchOS 2
