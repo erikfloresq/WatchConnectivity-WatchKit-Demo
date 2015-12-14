@@ -25,6 +25,15 @@
                             </items>
                         </table>
                     </items>
+                    <menu key="menu" id="xpY-q2-cvc">
+                        <items>
+                            <menuItem title="Menu Item" id="Pto-Uv-cTh">
+                                <connections>
+                                    <action selector="deleteItem" destination="AgC-eL-Hgc" id="rEE-Rs-yxM"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
                     <connections>
                         <outlet property="tableView" destination="3bz-MQ-6Rv" id="mbe-R8-djM"/>
                     </connections>

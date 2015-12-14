@@ -116,7 +116,7 @@ extension HomeVC: UITableViewDataSource {
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            items.removeAtIndex(indexPath.row)
+            self.items.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             
             let dataItem = ["item":indexPath.row]
@@ -127,6 +127,8 @@ extension HomeVC: UITableViewDataSource {
                         
                 })
             }
+            self.defaultDataUser.setObject(self.items, forKey: "DataUser")
+            self.sendData()
         }
     }
     

@@ -29,13 +29,14 @@ class HomeIC: WKInterfaceController {
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
         setupTable()
-        print("item count \(items.count)")
+        //print("item count \(items.count)")
+        print("awakeWithContext")
     }
     
     func setupTable() -> Void {
         if let itemArray = self.defaultDataUserWatch.objectForKey("DataUserWatch") {
             self.items = itemArray as! [String]
-            print("Use user default")
+            //print("Use user default")
         }
         
         tableView.setNumberOfRows(items.count, withRowType: "homeItemRow")
@@ -46,16 +47,34 @@ class HomeIC: WKInterfaceController {
         }
     }
     
+    // MARK: States
     override func willActivate() {
         super.willActivate()
+        print("will activate")
         setupTable()
+    }
+    
+    override func didAppear() {
+        print("did appear")
     }
     
     override func didDeactivate() {
         super.didDeactivate()
+        print("did Deactivate")
+        setupTable()
     }
     
+    // MARK: Table
+    override func table(table: WKInterfaceTable, didSelectRowAtIndex rowIndex: Int) {
+        print("rowindex \(rowIndex)")
+    }
+    
+    // MARK: Delete context
+    @IBAction func deleteItem() {
+        
+    }
 }
+
 
 // MARK: WCSessionDelegate
 extension HomeIC: WCSessionDelegate {
@@ -78,9 +97,12 @@ extension HomeIC: WCSessionDelegate {
     }
     
     func session(session: WCSession, didReceiveUserInfo applicationContext: [String : AnyObject]) {
-        print("string: \(applicationContext)")
-        self.items = (applicationContext["appDataUser"] as? Array)!
-        self.defaultDataUserWatch.setObject(self.items, forKey: "DataUserWatch")
+        print("didReceiveUserInfo: \(applicationContext)")
+        dispatch_async(dispatch_get_main_queue()) {
+            self.items = (applicationContext["appDataUser"] as? Array)!
+            self.defaultDataUserWatch.setObject(self.items, forKey: "DataUserWatch")
+            print("didReceiveUserInfo dispatch_async")
+        }
     }
    
     
