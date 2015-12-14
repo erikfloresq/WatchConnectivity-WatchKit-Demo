@@ -51,6 +51,8 @@ class HomeIC: WKInterfaceController {
     override func willActivate() {
         super.willActivate()
         print("will activate")
+        self.items = (WCSession.defaultSession().receivedApplicationContext["appDataUser"] as? Array)!
+        self.defaultDataUserWatch.setObject(self.items, forKey: "DataUserWatch")
         setupTable()
     }
     
@@ -79,7 +81,7 @@ class HomeIC: WKInterfaceController {
 // MARK: WCSessionDelegate
 extension HomeIC: WCSessionDelegate {
     
-    func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
+    /*func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
         
         dispatch_async(dispatch_get_main_queue()) {
             if let textValue = message["message"] as? [String] {
@@ -94,16 +96,16 @@ extension HomeIC: WCSessionDelegate {
             self.setupTable()
             
         }
-    }
+    }*/
     
     func session(session: WCSession, didReceiveUserInfo applicationContext: [String : AnyObject]) {
         print("didReceiveUserInfo: \(applicationContext)")
-        dispatch_async(dispatch_get_main_queue()) {
+        //dispatch_async(dispatch_get_main_queue()) {
             self.items = (applicationContext["appDataUser"] as? Array)!
             self.defaultDataUserWatch.setObject(self.items, forKey: "DataUserWatch")
             print("didReceiveUserInfo dispatch_async")
-        }
+        //}
     }
-   
+  
     
 }

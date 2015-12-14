@@ -61,7 +61,7 @@ class HomeVC: UIViewController, WCSessionDelegate {
             let messageText = textField.text!
             self.items.append(messageText)
             self.tableView.reloadData()
-            self.sendDataToWatch(self.items)
+            //self.sendDataToWatch(self.items)
             self.defaultDataUser.setObject(self.items, forKey: "DataUser")
             self.sendData()
         }
@@ -71,7 +71,7 @@ class HomeVC: UIViewController, WCSessionDelegate {
     }
     
     
-    func sendDataToWatch(messageText: [String]) -> Void {
+    /*func sendDataToWatch(messageText: [String]) -> Void {
         let applicationData = ["message" : messageText]
         if let session = session where session.reachable {
             session.sendMessage(applicationData,
@@ -81,12 +81,21 @@ class HomeVC: UIViewController, WCSessionDelegate {
                     print(error)
             })
         } else { }
-    }
+    }*/
+    
+    /*func sendData() -> Void {
+        do {
+            let applicationDict = ["appDataUser":self.defaultDataUser.objectForKey("DataUser")!]
+            WCSession.defaultSession().transferUserInfo(applicationDict)
+        }
+    }*/
     
     func sendData() -> Void {
         do {
             let applicationDict = ["appDataUser":self.defaultDataUser.objectForKey("DataUser")!]
-            WCSession.defaultSession().transferUserInfo(applicationDict)
+            try WCSession.defaultSession().updateApplicationContext(applicationDict)
+        }catch {
+            print("error send data xD")
         }
     }
 
