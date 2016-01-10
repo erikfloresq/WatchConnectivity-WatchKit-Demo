@@ -16,13 +16,15 @@ class HomeIC: WKInterfaceController {
     var items = [String]()
     @IBOutlet var tableView: WKInterfaceTable!
     var defaultDataUserWatch =  NSUserDefaults.standardUserDefaults()
-    
-    private let session: WCSession? = WCSession.isSupported() ?  WCSession.defaultSession() : nil
+    var session: WCSession!
     
     override init() {
         super.init()
-        session?.delegate = self
-        session?.activateSession()
+        if WCSession.isSupported() {
+            self.session = WCSession.defaultSession()
+            self.session.delegate = self
+            self.session.activateSession()
+        }
     }
     
     
@@ -57,9 +59,10 @@ class HomeIC: WKInterfaceController {
     
 }
 
-// MARK: WCSessionDelegate
+// MARK: - WCSessionDelegate
 extension HomeIC: WCSessionDelegate {
     
+    // Send Instant Messages
     func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
         
         dispatch_async(dispatch_get_main_queue()) {
@@ -77,6 +80,7 @@ extension HomeIC: WCSessionDelegate {
         }
     }
     
+    // Send Messages in Background
     func session(session: WCSession, didReceiveUserInfo applicationContext: [String : AnyObject]) {
         print("string: \(applicationContext)")
         self.items = (applicationContext["appDataUser"] as? Array)!

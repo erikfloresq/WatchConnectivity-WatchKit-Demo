@@ -11,15 +11,22 @@ import WatchConnectivity
 
 class HomeVC: UIViewController, WCSessionDelegate {
     
-    //Default User
+// MARK: - Variables
     var items = [String]()
     var defaultDataUser = NSUserDefaults.standardUserDefaults()
     
-    //Outlets
     @IBOutlet weak var tableView: UITableView!
     
-    // MARK: Watch Connection
-    private let session: WCSession? = WCSession.isSupported() ?  WCSession.defaultSession() : nil
+// MARK: - Watch Connection
+    private var session: WCSession!
+    
+    private func configureWCSession() {
+        if WCSession.isSupported() {
+            self.session = WCSession.defaultSession()
+            self.session.delegate = self
+            self.session.activateSession()
+        }
+    }
     
     private var validSession: WCSession? {
         if let session = session where session.paired && session.watchAppInstalled {
@@ -37,13 +44,9 @@ class HomeVC: UIViewController, WCSessionDelegate {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         configureWCSession()
     }
+
     
-    private func configureWCSession() {
-        session?.delegate = self
-        session?.activateSession()
-    }
-    
-    // MARK: Start Application
+// MARK: Start Application
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.defaultDataUser.objectForKey("DataUser") != nil {
@@ -53,7 +56,7 @@ class HomeVC: UIViewController, WCSessionDelegate {
         }
     }
     
-    // MARK: Send Item to Watch
+// MARK: - Send Item to Watch
     @IBAction func addItem(sender: AnyObject) {
         let addItemAlertController = UIAlertController(title: "Item", message: "Add Item", preferredStyle: .Alert) as UIAlertController
         let addItemAlertAction = UIAlertAction(title: "OK", style: .Default) { (UIAlertAction) -> Void in
@@ -73,6 +76,7 @@ class HomeVC: UIViewController, WCSessionDelegate {
     
     func sendDataToWatch(messageText: [String]) -> Void {
         let applicationData = ["message" : messageText]
+        // Send instance messages
         if let session = session where session.reachable {
             session.sendMessage(applicationData,
                 replyHandler: { replyData in
@@ -80,7 +84,7 @@ class HomeVC: UIViewController, WCSessionDelegate {
                 }, errorHandler: { error in
                     print(error)
             })
-        } else { }
+        }
     }
     
     func sendData() -> Void {
@@ -97,7 +101,7 @@ class HomeVC: UIViewController, WCSessionDelegate {
 
 }
 
-// MARK: Table View Data Source
+// MARK: - Table View Data Source
 extension HomeVC: UITableViewDataSource {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
