@@ -15,34 +15,33 @@ class HomeIC: WKInterfaceController {
     
     var items = [String]()
     @IBOutlet var tableView: WKInterfaceTable!
-    var defaultDataUserWatch =  NSUserDefaults.standardUserDefaults()
+    var defaultDataUserWatch =  UserDefaults.standard
     var session: WCSession!
     
     override init() {
         super.init()
         if WCSession.isSupported() {
-            self.session = WCSession.defaultSession()
+            self.session = WCSession.default
             self.session.delegate = self
-            self.session.activateSession()
+            self.session.activate()
         }
     }
     
-    
-    override func awakeWithContext(context: AnyObject?) {
-        super.awakeWithContext(context)
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
         setupTable()
         print("item count \(items.count)")
     }
     
     func setupTable() -> Void {
-        if let itemArray = self.defaultDataUserWatch.objectForKey("DataUserWatch") {
+        if let itemArray = self.defaultDataUserWatch.object(forKey: "DataUserWatch") {
             self.items = itemArray as! [String]
             print("Use user default")
         }
         
         tableView.setNumberOfRows(items.count, withRowType: "homeItemRow")
         for index in 0..<tableView.numberOfRows {
-            if let rowController = tableView.rowControllerAtIndex(index) as? HomeItemRow {
+            if let rowController = tableView.rowController(at: index) as? HomeItemRow {
                 rowController.lblItem.setText(items[index])
             }
         }
@@ -63,28 +62,30 @@ class HomeIC: WKInterfaceController {
 extension HomeIC: WCSessionDelegate {
     
     // Send Instant Messages
-    func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
-        
-        dispatch_async(dispatch_get_main_queue()) {
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        DispatchQueue.main.async {
             if let textValue = message["message"] as? [String] {
                 //self.items.append(textValue)
                 self.items = textValue
             }
             if let itemValue = message["item"] as? Int {
-                self.items.removeAtIndex(itemValue)
+                self.items.remove(at: itemValue)
                 
             }
-            self.defaultDataUserWatch.setObject(self.items, forKey: "DataUserWatch")
+            self.defaultDataUserWatch.set(self.items, forKey: "DataUserWatch")
             self.setupTable()
-            
         }
     }
     
     // Send Messages in Background
-    func session(session: WCSession, didReceiveUserInfo applicationContext: [String : AnyObject]) {
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         print("string: \(applicationContext)")
         self.items = (applicationContext["appDataUser"] as? Array)!
-        self.defaultDataUserWatch.setObject(self.items, forKey: "DataUserWatch")
+        self.defaultDataUserWatch.set(self.items, forKey: "DataUserWatch")
+    }
+    
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        
     }
    
     
